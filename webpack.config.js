@@ -1,11 +1,11 @@
 const path = require('path');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const webpack = require('webpack')
-
+const webpack = require('webpack');
+const CopyPlugin = require('copy-webpack-plugin');
 
 
 module.exports = {
-    entry: './src/js/index.js',
+    entry: ['babel-polyfill', './src/js/index.js'],
     output: {
         path: path.resolve(__dirname, 'dist'),
         publicPath: '',
@@ -26,6 +26,7 @@ module.exports = {
             },
             {
                 test: /\.(sa|sc|c)ss$/,
+                exclude: /(node_modules)/,
                 use: [
                     {
                         loader: MiniCssExtractPlugin.loader
@@ -43,21 +44,22 @@ module.exports = {
                         }
                     }
                 ]
-            }
+            },
         ]
     },
     plugins: [
         new MiniCssExtractPlugin({
             filename: "bundle.css"
         }),
-        // new webpack.ProvidePlugin({
-        //     process: 'process/browser',
-        //     // buffer: 'buffer/browser',
-        // }),
+        new webpack.ProvidePlugin({
+            process: 'process/browser',
+            buffer: 'buffer',
+        }),
+        new CopyPlugin({
+            patterns: [
+                { from: "src/js/pdf.worker.js", to: "." },
+                { from: "src/js/pdf.worker.js.map", to: "." },
+            ],
+        }),
     ],
-    resolve: {
-        fallback: {
-            fs: false
-        }
-    }
 };
