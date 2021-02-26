@@ -6,25 +6,27 @@ export class OcrCore {
         this.scheduler = new CustomScheduler(this.getNumberOfWorkers());
     }
 
-    async recognizeAllImages() {
-        await this.scheduler.createWorkers();
+    async recognizeAllImages(languages) {
+        await this.scheduler.createWorkers(languages);
         await this.scheduler.addJobs(
             this.images
                 .map(image => {
                     return async (worker) => {
-                        console.log(worker, image);
+                        console.log(worker);
                         await worker.recognize(image);
-                        return await worker.getPDF();
+                        let { data } = await worker.getPDF('test');
+                        return new Uint8Array(data);
                     };
                 })
         );
         const results = await this.scheduler.runAllJobs();
         this.scheduler.terminate();
-        return results;
+        // For some reason we are getting reversed list of the pages
+        return results.reverse();
     }
 
     getNumberOfWorkers() {
-        return Math.min(this.images.length, 1);
+        return Math.min(this.images.length, 4);
     }
 }
 
@@ -37,24 +39,25 @@ class CustomScheduler {
         this.terminated = false;
     }
 
-    async createWorkers() {
+    async createWorkers(languages) {
         console.log("Creating workers");
         let promises = [];
         for (let i = 0; i < this.numberOfWorkers; i++) {
-            promises.push(this.createWorker());
+            promises.push(this.createWorker(languages));
         }
         this.workers = await Promise.all(promises);
     }
 
-    async createWorker() {
+    async createWorker(languages) {
         const worker = createWorker({
             corePath: '/node_modules/tesseract.js-core/tesseract-core.wasm.js',
             // logger: m => console.log(m)
         });
 
         await worker.load();
-        await worker.loadLanguage('eng');
-        await worker.initialize('eng');
+        const languageFlag = languages.join('+');
+        await worker.loadLanguage(languageFlag);
+        await worker.initialize(languageFlag);
         return worker;
     }
 
