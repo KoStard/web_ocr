@@ -1,14 +1,42 @@
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web OCR</title>
-</head>
-<body>
-    <input type="file" name="Input file" id="file_input">
-
-    <script src='dist/bundle.js'></script>
+    <title>Free OCR inside your browser - process PDF files</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/tonsky/FiraCode@1.207/distr/fira_code.css">
     <link rel="stylesheet" href="dist/bundle.css">
+</head>
+
+<body>
+    <div class="container_box">
+        <div id="info">
+            <h4>Free OCR inside your browser</h4>
+        </div>
+        <div id="languages_div">
+            <select name="languages" id="languages-select" class="form-select">
+            </select>
+            <button type="button" id='add-language-button' class="btn btn-primary">Select Language</button>
+            <div id="selected-languages"></div>
+        </div>
+        <div id="box_and_progress_container">
+            <div id="box">
+                <div class="inner" id="input-container">
+                    <span id="input-message">Drag & drop file or click here to select one.</span>
+                    <input type="file" id="file-input" accept=".pdf">
+                    </input>
+                </div>
+            </div>
+            <div id="progress">
+                <div id="progressMessage">
+                    <span id="progressMessageSpan">Waiting...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src='dist/bundle.js'></script>
 </body>
+
 </html>

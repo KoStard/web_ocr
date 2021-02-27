@@ -5,7 +5,7 @@ export class PdfToPngConverter {
 
     async render() {
         let promises = [];
-        for (let i = 1; i <= 4; i++) {
+        for (let i = 1; i <= this.pdf.numPages; i++) {
             const image = this.renderPage(i);
             promises.push(image);
         }

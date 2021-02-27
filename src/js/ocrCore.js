@@ -6,7 +6,7 @@ export class OcrCore {
         this.scheduler = new CustomScheduler(this.getNumberOfWorkers());
     }
 
-    async recognizeAllImages(languages) {
+    async recognizeAllImages(languages, statusUpdateCallback) {
         await this.scheduler.createWorkers(languages);
         await this.scheduler.addJobs(
             this.images
@@ -19,7 +19,12 @@ export class OcrCore {
                     };
                 })
         );
-        const results = await this.scheduler.runAllJobs();
+        const results = await this.scheduler.runAllJobs((currentResults) => {
+            let currentlyProcessed = currentResults.length;
+            if (statusUpdateCallback) {
+                statusUpdateCallback(currentlyProcessed, this.images.length);
+            }
+        });
         this.scheduler.terminate();
         // For some reason we are getting reversed list of the pages
         return results.reverse();
@@ -66,7 +71,7 @@ class CustomScheduler {
         this.jobs = this.jobs.concat(jobs);
     }
 
-    async runAllJobs() {
+    async runAllJobs(statusUpdateCallback) {
         if (this.terminated) {
             throw new Error("Trying to start jobs on terminated scheduler");
         }
@@ -83,6 +88,9 @@ class CustomScheduler {
             }).filter(e => e);
             let currentResults = await Promise.all(promises);
             results = results.concat(currentResults);
+            if (statusUpdateCallback) {
+                statusUpdateCallback(results);
+            }
         }
         return results;
     }
