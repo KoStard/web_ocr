@@ -73,7 +73,7 @@ export class LanguagesInput {
     }
 }
 
-const languages = [
+export const languages = [
     ["hye", "Armenian"],
     ["afr", "Afrikaans"],
     ["amh", "Amharic"],
@@ -197,7 +197,7 @@ const languages = [
     ["yor", "Yoruba"],
 ];
 
-const languagesMap = {};
+export const languagesMap = {};
 for (const comb of languages) { languagesMap[comb[0]] = comb[1]; }
 
 
