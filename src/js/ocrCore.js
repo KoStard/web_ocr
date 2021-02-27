@@ -55,7 +55,7 @@ class CustomScheduler {
 
     async createWorker(languages) {
         const worker = createWorker({
-            corePath: '/node_modules/tesseract.js-core/tesseract-core.wasm.js',
+            corePath: 'tesseract-core.wasm.js',
             // logger: m => console.log(m)
         });
 
@@ -76,6 +76,9 @@ class CustomScheduler {
             throw new Error("Trying to start jobs on terminated scheduler");
         }
         let results = [];
+        if (statusUpdateCallback) {
+            statusUpdateCallback(results);
+        }
         while (this.jobs.length) {
             if (this.workers.length == 0) {
                 throw new Error("No workers attached");

@@ -59,6 +59,8 @@ module.exports = {
             patterns: [
                 { from: "src/js/pdf.worker.js", to: "." },
                 { from: "src/js/pdf.worker.js.map", to: "." },
+                { from: "index.html", to: "." },
+                { from: "node_modules/tesseract.js-core/tesseract-core.wasm.js", to: "." },
             ],
         }),
     ],

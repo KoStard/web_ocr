@@ -10,7 +10,7 @@ import { LanguagesInput } from './languagesInput';
 import { ContainerHandler } from './containerHandler';
 import { ProgressOutputHandler } from './progressOutput';
 
-GlobalWorkerOptions.workerSrc = '/dist/pdf.worker.js';
+GlobalWorkerOptions.workerSrc = '/pdf.worker.js';
 
 
 class EntryPoint {
@@ -44,17 +44,17 @@ class EntryPoint {
         this.containerHandler.updateState(true);
 
         console.log("Converting pdf to pngs");
-        this.progressOutputHandler.updateMessage("Converting pdf to pngs");
+        this.progressOutputHandler.updateMessage("Step 1 : Converting pdf to pngs");
         const pdfToPngConverter = new PdfToPngConverter(inputPdf);
         const images = await pdfToPngConverter.render();
         console.log("Passing images to OCR core");
-        this.progressOutputHandler.updateMessage("Passing images to OCR core");
+        this.progressOutputHandler.updateMessage("Step 2 : Passing images to OCR core");
         const ocrCore = new OcrCore(images);
         const pdfs = await ocrCore.recognizeAllImages(this.languagesInputHandler.getLanguageCodes(), (currentlyProcessedCount, allPagesCount) => {
             this.progressOutputHandler.updateMessage(`Processed ${currentlyProcessedCount} pages out of ${allPagesCount}`);
         });
         console.log("Generating final file");
-        this.progressOutputHandler.updateMessage("Generating final file");
+        this.progressOutputHandler.updateMessage("Step 3 : Generating final file");
         const merger = new Merger();
         pdfs.forEach(pdf => merger.add(pdf));
         const outputPdfBuffer = await merger.getResult();
