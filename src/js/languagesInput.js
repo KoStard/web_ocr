@@ -46,7 +46,6 @@ export class LanguagesInput {
 
     addInitialSetOfLanguages() {
         this.addLanguage('hye', languagesMap.hye);
-        this.addLanguage('rus', languagesMap.rus);
 
         this.checkAndUpdateButtonState();
     }

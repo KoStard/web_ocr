@@ -1,21 +1,24 @@
 export class PdfToPngConverter {
     constructor(pdf) {
         this.pdf = pdf;
+        this.renderedPagesCount = 0;
     }
 
-    async render() {
+    async render(statusUpdateCallback) {
         let promises = [];
-        for (let i = 1; i <= this.pdf.numPages; i++) {
-            const image = this.renderPage(i);
+        let pages = this.pdf.numPages;
+        for (let i = 1; i <= pages; i++) {
+            const image = this.renderPage(i, pages, statusUpdateCallback);
             promises.push(image);
         }
         return await Promise.all(promises);
     }
 
-    async renderPage(currentPage) {
+    async renderPage(currentPage, pages, statusUpdateCallback) {
         const page = await this.pdf.getPage(currentPage);
         // Maybe if we increase the scale, the letters can become easier to recognize, but it will take longer to process
-        const viewport = page.getViewport({ scale: 1 });
+        const scale = 1.5;
+        const viewport = page.getViewport({ scale });
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d');
         const renderContext = { canvasContext: ctx, viewport };
@@ -24,6 +27,10 @@ export class PdfToPngConverter {
         canvas.width = viewport.width;
         await page.render(renderContext).promise;
         return await new Promise(resolve => {
+            this.renderedPagesCount += 1;
+            if (statusUpdateCallback) {
+                statusUpdateCallback(this.renderedPagesCount, pages);
+            }
             resolve(canvas.toDataURL());
         });
     }

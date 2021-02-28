@@ -10,7 +10,7 @@ import { LanguagesInput } from './languagesInput';
 import { ContainerHandler } from './containerHandler';
 import { ProgressOutputHandler } from './progressOutput';
 
-GlobalWorkerOptions.workerSrc = '/pdf.worker.js';
+GlobalWorkerOptions.workerSrc = 'pdf.worker.js';
 
 
 class EntryPoint {
@@ -46,7 +46,9 @@ class EntryPoint {
         console.log("Converting pdf to pngs");
         this.progressOutputHandler.updateMessage("Step 1 : Converting pdf to pngs");
         const pdfToPngConverter = new PdfToPngConverter(inputPdf);
-        const images = await pdfToPngConverter.render();
+        const images = await pdfToPngConverter.render((currentPage, allPages) => {
+            this.progressOutputHandler.updateMessage(`Step 1 : Converting pdf to pngs. Converted ${currentPage} pages out of ${allPages}`);
+        });
         console.log("Passing images to OCR core");
         this.progressOutputHandler.updateMessage("Step 2 : Passing images to OCR core");
         const ocrCore = new OcrCore(images);

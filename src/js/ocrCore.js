@@ -14,7 +14,7 @@ export class OcrCore {
                     return async (worker) => {
                         console.log(worker);
                         await worker.recognize(image);
-                        let { data } = await worker.getPDF('test');
+                        let { data } = await worker.getPDF('document');
                         return new Uint8Array(data);
                     };
                 })
@@ -61,6 +61,7 @@ class CustomScheduler {
 
         await worker.load();
         const languageFlag = languages.join('+');
+        console.log(`Using language flag - ${languageFlag}`);
         await worker.loadLanguage(languageFlag);
         await worker.initialize(languageFlag);
         return worker;
@@ -83,12 +84,10 @@ class CustomScheduler {
             if (this.workers.length == 0) {
                 throw new Error("No workers attached");
             }
-            let promises = this.workers.map(async worker => {
-                if (this.jobs.length) {
-                    const job = this.jobs.pop();
-                    return await job(worker);
-                }
-            }).filter(e => e);
+            let promises = this.workers.slice(0, this.jobs.length).map(async worker => {
+                const job = this.jobs.pop();
+                return await job(worker);
+            });
             let currentResults = await Promise.all(promises);
             results = results.concat(currentResults);
             if (statusUpdateCallback) {
