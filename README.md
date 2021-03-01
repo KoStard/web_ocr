@@ -16,13 +16,18 @@ The website: https://kostard.github.io/web_ocr/
 
 Before - pdf with scanned pages 
 
-![Before](https://user-images.githubusercontent.com/30292877/109553626-89971480-7ad3-11eb-94a0-669a304eeb5f.PNG)
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/30292877/109553626-89971480-7ad3-11eb-94a0-669a304eeb5f.PNG">
+</p>
 
 After - pdf with the same images and text on top of it
 
-![After](https://user-images.githubusercontent.com/30292877/109553615-86038d80-7ad3-11eb-9c85-5e6e9a2398b7.PNG)
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/30292877/109553615-86038d80-7ad3-11eb-9c85-5e6e9a2398b7.PNG">
+</p>
 
 The text from the output copy-pasted to show the accuracy
 
-![After-copy-pasted](https://user-images.githubusercontent.com/30292877/109553625-8865e780-7ad3-11eb-983f-afb413b98881.PNG)
-
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/30292877/109553625-8865e780-7ad3-11eb-983f-afb413b98881.PNG">
+</p>
