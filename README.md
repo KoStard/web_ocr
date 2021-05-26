@@ -31,3 +31,8 @@ The text from the output copy-pasted to show the accuracy
 <p align="center">
   <img src="https://user-images.githubusercontent.com/30292877/109553625-8865e780-7ad3-11eb-983f-afb413b98881.PNG">
 </p>
+
+
+## Building the package
+- `npm install`
+- `npm build`

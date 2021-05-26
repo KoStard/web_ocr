@@ -63,6 +63,7 @@ class EntryPoint {
         const blob = new Blob([new Uint8Array(outputPdfBuffer)], { type: 'application/pdf' });
         Downloader.downloadBlob(blob, this.generateOutputName(inputPdfName));
         this.containerHandler.updateState(false);
+        this.fileInput.value = null;
     }
 }
 
